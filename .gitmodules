@@ -1,3 +1,0 @@
-[submodule "faasm"]
-	path = faasm
-	url = https://github.com/faasm/faasm.git
