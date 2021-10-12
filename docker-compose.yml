@@ -1,0 +1,20 @@
+version: "3"
+
+services:
+  polybench:
+    image: faasm/experiment-polybench:0.0.1
+    working_dir: /code/experiment-microbench
+    stdin_open: true
+    tty: true
+    network_mode: host
+    volumes:
+      - .:/code/experiment-microbench
+
+  pyperf:
+    image: faasm/experiment-pyperf:0.0.1
+    working_dir: /code/experiment-microbench
+    stdin_open: true
+    tty: true
+    network_mode: host
+    volumes:
+      - .:/code/experiment-microbench

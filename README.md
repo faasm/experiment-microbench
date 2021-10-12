@@ -13,12 +13,10 @@ They include:
 First you need to set up a local Faasm cluster, as per the [Faasm
 docs](https://github.com/faasm/faasm).
 
-You can check this is set up properly by running (in the root of this repo):
+Check this is running with:
 
 ```bash
-docker-compose run -it check /bin/bash
-
-inv check
+curl http://localhost:8002/ping
 ```
 
 ### Polybench/C
@@ -46,4 +44,14 @@ To do this, from the root of this repo:
 docker-compose run -it pyperf /bin/bash
 
 inv pyperf
+```
+
+## Docker images
+
+To rebuild the Docker images, set up the virtualenv, then:
+
+```bash
+inv container.polybench --push
+
+inv container.pyperf --push
 ```
