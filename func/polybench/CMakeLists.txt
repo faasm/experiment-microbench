@@ -1,16 +1,30 @@
+# CMake setup
+cmake_minimum_required (VERSION 3.11)
+
+SET(CMAKE_EXE_LINKER_FLAGS "${FAASM_EXE_LINKER_FLAGS} \
+    -Xlinker --export=_faasm_zygote \
+    -Xlinker --export=__heap_base \
+    -Xlinker --export=__data_end \
+    -Xlinker --export=__wasm_call_ctors \
+    -Xlinker --max-memory=4294901760 \
+    -Wl,-z,stack-size=4194304 -Wl, \
+")
+
+SET(CMAKE_EXECUTABLE_SUFFIX ".wasm")
+
 include_directories(${CMAKE_CURRENT_LIST_DIR}/utilities)
 
-if (FAASM_BUILD_TYPE STREQUAL "wasm")
-    # NOTE - at the time of writing this switch greatly improved performance.
-    # BUT - we can't compile everything with it as it'll break other stuff that
-    # tries to use the unimplemented functionality
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -munimplemented-simd128")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -munimplemented-simd128")
-endif()
+# NOTE - at the time of writing this switch greatly improved performance.
+# BUT - we can't compile everything with it as it'll break other stuff that
+# tries to use the unimplemented functionality
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -munimplemented-simd128")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -munimplemented-simd128")
 
 # Define the polybench data type here
 # We want to use 32-bit floats to work well with wasm
 add_definitions(-DDATA_TYPE_IS_FLOAT=1)
+
+set(FAASM_FUNC_LIBS faasm c-printscan-long-double)
 
 function(polybench_func exec_name dir_path)
     add_executable(poly_${exec_name}
@@ -20,11 +34,7 @@ function(polybench_func exec_name dir_path)
             utilities/polybench.h
             )
 
-    if (FAASM_BUILD_TYPE STREQUAL "wasm")
-        target_link_libraries(poly_${exec_name} faasm)
-    else()
-        target_link_libraries(poly_${exec_name} m)
-    endif()
+        target_link_libraries(poly_${exec_name} ${FAASM_FUNC_LIBS})
 
     # Add this func to the list of all functions
     set(ALL_POLY_FUNCS ${ALL_POLY_FUNCS} poly_${exec_name} PARENT_SCOPE)
@@ -60,5 +70,5 @@ polybench_func(jacobi-2d stencils)
 polybench_func(seidel-2d stencils)
 
 # Custom target to group all the poly functions
-add_custom_target(polybench_all_funcs DEPENDS ${ALL_POLY_FUNCS})
+add_custom_target(polybench_all DEPENDS ${ALL_POLY_FUNCS})
 

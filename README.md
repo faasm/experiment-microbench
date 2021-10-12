@@ -27,7 +27,7 @@ The Polybench functions are checked into this repo, and can be built with the
 To do this, from the root of this repo:
 
 ```bash
-docker-compose run -it polybench /bin/bash
+docker-compose run polybench
 
 inv polybench
 ```
@@ -41,7 +41,7 @@ toolchain](https://github.com/faasm/python).
 To do this, from the root of this repo:
 
 ```bash
-docker-compose run -it pyperf /bin/bash
+docker-compose run pyperf
 
 inv pyperf
 ```

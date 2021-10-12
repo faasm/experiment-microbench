@@ -8,6 +8,6 @@ WORKDIR /code/experiment-microbench
 RUN git checkout first-cut
 
 # Wasm build
-RUN inv polybench
+# RUN inv polybench
 
 CMD "/bin/bash"

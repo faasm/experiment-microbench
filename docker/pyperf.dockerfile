@@ -8,7 +8,7 @@ WORKDIR /code/experiment-microbench
 RUN git checkout first-cut
 
 # Wasm build
-RUN inv pyperf
+# RUN inv pyperf
 
 CMD "/bin/bash"
 

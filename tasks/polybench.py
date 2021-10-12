@@ -43,13 +43,12 @@ def build(ctx, clean=False):
         cwd=POLYBENCH_BUILD_DIR,
     )
 
-    build_dir = join(POLYBENCH_BUILD_DIR, "polybench")
-    all_files = listdir(build_dir)
+    all_files = listdir(POLYBENCH_BUILD_DIR)
     wasm_files = [f for f in all_files if f.endswith(".wasm")]
 
     for wasm_file in wasm_files:
         func_name = wasm_file.replace(".wasm", "")
-        full_file = join(build_dir, wasm_file)
+        full_file = join(POLYBENCH_BUILD_DIR, wasm_file)
 
         print(
             "Uploading {} to {}:{}".format(
