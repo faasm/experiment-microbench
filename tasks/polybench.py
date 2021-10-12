@@ -58,4 +58,6 @@ def build(ctx, clean=False):
         url = "http://{}:{}/f/{}/{}".format(
             FAASM_UPLOAD_HOST, FAASM_UPLOAD_PORT, POLYBENCH_USER, func_name
         )
-        requests.put(url, data=open(full_file, "rb"))
+        response = requests.put(url, data=open(full_file, "rb"))
+
+        print("Response ({}): {}".format(response.status_code, response.text))

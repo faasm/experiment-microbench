@@ -14,12 +14,6 @@ SET(CMAKE_EXECUTABLE_SUFFIX ".wasm")
 
 include_directories(${CMAKE_CURRENT_LIST_DIR}/utilities)
 
-# NOTE - at the time of writing this switch greatly improved performance.
-# BUT - we can't compile everything with it as it'll break other stuff that
-# tries to use the unimplemented functionality
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -munimplemented-simd128")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -munimplemented-simd128")
-
 # Define the polybench data type here
 # We want to use 32-bit floats to work well with wasm
 add_definitions(-DDATA_TYPE_IS_FLOAT=1)
