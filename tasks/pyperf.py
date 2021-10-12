@@ -19,8 +19,9 @@ def upload(ctx):
 
     for func in funcs:
         func_file = join(PY_FUNC_DIR, func)
+        func_name = func.replace(".py", "")
         url = "http://{}:{}/p/{}/{}".format(
-            FAASM_UPLOAD_HOST, FAASM_UPLOAD_PORT, USER, func
+            FAASM_UPLOAD_HOST, FAASM_UPLOAD_PORT, USER, func_name
         )
 
         print(
