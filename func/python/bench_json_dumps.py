@@ -14,6 +14,4 @@ def faasm_main():
 
         bench_json_dumps(data)
 
-
-if __name__ == "__main__":
-    faasm_main()
+    return 0

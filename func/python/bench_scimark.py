@@ -400,6 +400,4 @@ def faasm_main():
         f = BENCHMARKS[bench][0]
         f(loops, *args)
 
-
-if __name__ == "__main__":
-    faasm_main()
+    return 0

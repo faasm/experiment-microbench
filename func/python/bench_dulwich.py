@@ -21,6 +21,4 @@ def faasm_main():
 
     repo.close()
 
-
-if __name__ == "__main__":
-    faasm_main()
+    return 0

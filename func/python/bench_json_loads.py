@@ -17,6 +17,4 @@ def faasm_main():
     for x in range(100):
         bench_json_loads(objs)
 
-
-if __name__ == "__main__":
-    faasm_main()
+    return 0

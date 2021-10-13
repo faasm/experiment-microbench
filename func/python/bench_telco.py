@@ -94,6 +94,4 @@ def faasm_main():
 
     bench_telco(loops, file_path)
 
-
-if __name__ == "__main__":
-    faasm_main()
+    return 0
