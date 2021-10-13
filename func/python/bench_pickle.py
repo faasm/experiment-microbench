@@ -243,6 +243,4 @@ def faasm_main():
         benchmark, inner_loops = BENCHMARKS[bm_name]
         benchmark(inner_loops * multiplier)
 
-
-if __name__ == "__main__":
-    faasm_main()
+    return 0

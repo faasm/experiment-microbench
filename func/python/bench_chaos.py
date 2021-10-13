@@ -55,6 +55,4 @@ def faasm_main():
         DEFAULT_WIDTH, DEFAULT_HEIGHT, iterations, filename, DEFAULT_RNG_SEED
     )
 
-
-if __name__ == "__main__":
-    faasm_main()
+    return 0

@@ -33,6 +33,4 @@ def faasm_main():
     for i in range(10):
         _do_bench()
 
-
-if __name__ == "__main__":
-    faasm_main()
+    return 0

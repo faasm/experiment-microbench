@@ -8,7 +8,4 @@ from pyperformance.benchmarks.bm_raytrace import (
 def faasm_main():
     filename = "raytrace.ppm"
     bench_raytrace(2, DEFAULT_WIDTH, DEFAULT_HEIGHT, filename)
-
-
-if __name__ == "__main__":
-    faasm_main()
+    return 0
