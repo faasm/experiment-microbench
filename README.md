@@ -39,32 +39,27 @@ inv dev.cc microbench_runner
 The Polybench functions are checked into this repo, and can be built with the
 [Faasm C++ toolchain](https://github.com/faasm/cpp).
 
-To do this and upload to Faasm, from the root of this repo:
+To set up the functions:
 
 ```bash
+# Enter the container
 docker-compose run polybench
 
+# Compile and upload
 inv polybench
 inv polybench.upload
+
+# Exit
+exit
 ```
 
-Set up the spec for the Faasm benchmark:
+Then run with:
 
 ```bash
-cp polybench.csv ${FAASM_ROOT}/bench
+./bin/run.sh polybench
 ```
 
-Run the benchmark:
-
-```bash
-cd ${FAASM_ROOT}
-docker-compose exec faasm-cli \
-  /build/faasm/bin/microbench_runner \
-  /usr/local/code/faasm/bench/polybench.csv \
-  /usr/local/code/faasm/bench/polybench_out.csv
-```
-
-You can then parse the data at `${FAASM_ROOT}/bench/polybench_out.csv`.
+Results are found at `polybench_out.csv` in the root of this directory.
 
 ### Python performance benchmarks
 
@@ -72,31 +67,26 @@ Faasm's [Python support](https://github.com/faasm/python) includes the Python
 performance benchmarks library and the transitive dependencies for the
 benchmarks, hence we just need to upload the functions.
 
-To do this, from the root of this repo:
+To set up the functions:
 
 ```bash
+# Run container
 docker-compose run pyperf
 
+# Upload Python benchmark functions
 inv pyperf
+
+# Leave container
+exit
 ```
 
-Set up the spec for the Faasm benchmark:
+Then run with:
 
 ```bash
-cp pyperf.csv ${FAASM_ROOT}/bench
+./bin/run.sh pyperf
 ```
 
-Run the benchmark:
-
-```bash
-cd ${FAASM_ROOT}
-docker-compose exec faasm-cli \
-  /build/faasm/bin/microbench_runner \
-  /usr/local/code/faasm/bench/pyperf.csv \
-  /usr/local/code/faasm/bench/pyperf_out.csv
-```
-
-You can then parse the data at `${FAASM_ROOT}/bench/polybench_out.csv`.
+Results are found at `pyperf_out.csv` in the root of this directory.
 
 ## Docker images
 
