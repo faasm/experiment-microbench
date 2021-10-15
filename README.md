@@ -45,6 +45,7 @@ To do this and upload to Faasm, from the root of this repo:
 docker-compose run polybench
 
 inv polybench
+inv polybench.upload
 ```
 
 Set up the spec for the Faasm benchmark:

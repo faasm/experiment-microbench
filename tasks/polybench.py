@@ -43,6 +43,9 @@ def build(ctx, clean=False):
         cwd=POLYBENCH_BUILD_DIR,
     )
 
+
+@task
+def upload(ctx, clean=False):
     all_files = listdir(POLYBENCH_BUILD_DIR)
     wasm_files = [f for f in all_files if f.endswith(".wasm")]
 
