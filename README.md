@@ -25,7 +25,11 @@ Then you need to build the benchmark runner:
 cd ${FAASM_ROOT}
 mkdir -p bench
 
-docker-compose run faasm-cli /bin/bash
+# Start the faasm-cli container in the background
+docker-compose up -d --no-recreate faasm-cli
+
+# Get a terminal
+docker-compose exec faasm-cli /bin/bash
 
 # Set up the release build
 inv dev.cmake --build=Release
