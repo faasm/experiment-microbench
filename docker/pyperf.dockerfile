@@ -1,7 +1,9 @@
 FROM faasm/cpython:0.1.0
 
 RUN apt update
-RUN apt install -y python3-dev
+RUN apt install -y \
+    python3-dev \
+    python3-matplotlib
 
 # Clone the code
 RUN git clone https://github.com/faasm/experiment-microbench /code/experiment-microbench

@@ -19,7 +19,7 @@ PY_FUNC_DIR = join(PROJ_ROOT, "func", "python")
 USER = "python"
 
 
-@task(default=True)
+@task
 def upload(ctx):
     """
     Upload the python performance functions
@@ -75,14 +75,14 @@ def native_build(ctx, clean=False):
 
 
 @task
-def native_run(ctx, clean=False, bench="all", reps=5):
+def native_run(ctx, clean=False, bench="all", reps=10):
     """
     Runs the native python benchmarks
     """
     binary = join(NATIVE_BUILD_DIR, "bin", "py_runner")
 
-    env = copy(os.env)
+    env = copy(os.environ)
     env["MICROBENCH_ROOT"] = PROJ_ROOT
 
     cmd = "{} {} {}".format(binary, bench, str(reps))
-    run(" ".join(cmd), check=True, shell=True, env=env)
+    run(cmd, check=True, shell=True, env=env)
