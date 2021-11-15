@@ -2,15 +2,8 @@ from invoke import task
 from collections import defaultdict
 import numpy as np
 import matplotlib.pyplot as plt
-import os
-from os import listdir, makedirs
-from os.path import join, exists
-from tasks.env import (
-    PROJ_ROOT,
-    FAASM_UPLOAD_HOST,
-    FAASM_UPLOAD_PORT,
-    NATIVE_BUILD_DIR,
-)
+from os.path import join
+from tasks.env import PROJ_ROOT
 
 NATIVE_RESULTS = join(PROJ_ROOT, "results", "pyperf_native_out.csv")
 FAASM_RESULTS = join(PROJ_ROOT, "results", "pyperf_out.csv")
@@ -50,7 +43,9 @@ def pyperf(ctx, headless=False):
 
     bench_names = list()
     exec_times = list()
+    exec_errs = list()
 
+    # Load data for all benchmarks
     for bench_name in native_data.keys():
         print("Found native bench {}".format(bench_name))
         if bench_name not in faasm_data:
@@ -60,15 +55,29 @@ def pyperf(ctx, headless=False):
         native_bench = native_data[bench_name]
         faasm_bench = faasm_data[bench_name]
 
-        native_exec = np.mean([n[0] for n in native_bench])
-        faasm_exec = np.mean([n[0] for n in faasm_bench])
+        # Calculate averages and stddevs
+        native_execs = [n[0] for n in native_bench]
+        faasm_execs = [n[0] for n in faasm_bench]
 
-        faasm_ratio = faasm_exec / native_exec
+        # Get ratios of Faasm runtime to native
+        faasm_ratios = list()
+        for f, n in zip(faasm_execs, native_execs):
+            faasm_ratios.append(f / n)
 
-        exec_times.append(faasm_ratio)
         bench_names.append(bench_name)
+        exec_times.append(np.mean(faasm_ratios))
+        exec_errs.append(np.std(faasm_ratios))
 
-    plt.bar(bench_names, exec_times)
+    # Plot the bar chart
+    plt.bar(
+        bench_names,
+        exec_times,
+        yerr=exec_errs,
+        alpha=0.9,
+        color="steelblue",
+        ecolor="dimgrey",
+        capsize=2,
+    )
 
     ax = plt.gca()
     ax.axhline(1.0, linestyle="--", color="red")
@@ -83,7 +92,7 @@ def pyperf(ctx, headless=False):
 
     plt.tight_layout()
 
-    if headless:
-        plt.savefig(PLOT_FILE, format="png")
-    else:
+    plt.savefig(PLOT_FILE, format="png")
+
+    if not headless:
         plt.show()
