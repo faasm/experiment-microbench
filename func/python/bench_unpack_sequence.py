@@ -14,3 +14,7 @@ def faasm_main():
     loops = 5
     bench_all(loops)
     return 0
+
+
+if __name__ == "__main__":
+    faasm_main()

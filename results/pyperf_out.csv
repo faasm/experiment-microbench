@@ -1,0 +1,23 @@
+User,Function,Return value,Execution (us),Reset (us)
+python,bench_chaos,0,834059,3457.91
+python,bench_deltablue,0,101003,3312.24
+python,bench_fannkuch,0,81580.9,3246.23
+python,bench_float,0,136915,3623.22
+python,bench_go,0,782518,5587.44
+python,bench_hexiom,0,352899,3414.97
+python,bench_json_dumps,0,658287,4470.66
+python,bench_json_loads,0,207513,3324.83
+python,bench_logging,0,240365,3375.94
+python,bench_mdp,0,8.03223e+06,6655.04
+python,bench_nbody,0,3.9629e+06,3795.62
+python,bench_pickle,0,155483,2053.44
+python,bench_pidigits,0,5.95386e+06,5510.79
+python,bench_pyaes,0,6.57851e+06,5828.43
+python,bench_pyflate,0,2.01249e+06,5396.61
+python,bench_raytrace,0,3.03428e+06,3885.28
+python,bench_richards,0,492500,3503.06
+python,bench_scimark,0,2.44605e+06,3737.63
+python,bench_spectral_norm,0,1.00034e+06,3821.75
+python,bench_telco,0,168002,1702.52
+python,bench_unpack_sequence,0,79293,3302.49
+python,bench_version,0,3677.81,1613.84

@@ -1,15 +1,17 @@
 import requests
-from os.path import join
+from copy import copy
 from invoke import task
-from os import listdir
-from tasks.env import PROJ_ROOT, FAASM_UPLOAD_HOST, FAASM_UPLOAD_PORT
-from invoke import task
+import os
+from os import listdir, makedirs
+from os.path import join, exists
 from shutil import rmtree
-from os.path import exists
-from os import makedirs
 from subprocess import run
-
-from tasks.env import PROJ_ROOT, NATIVE_BUILD_DIR
+from tasks.env import (
+    PROJ_ROOT,
+    FAASM_UPLOAD_HOST,
+    FAASM_UPLOAD_PORT,
+    NATIVE_BUILD_DIR,
+)
 
 
 PY_FUNC_DIR = join(PROJ_ROOT, "func", "python")
@@ -73,8 +75,14 @@ def native_build(ctx, clean=False):
 
 
 @task
-def native_run(ctx, clean=False):
+def native_run(ctx, clean=False, bench="all", reps=5):
     """
     Runs the native python benchmarks
     """
-    pass
+    binary = join(NATIVE_BUILD_DIR, "bin", "py_runner")
+
+    env = copy(os.env)
+    env["MICROBENCH_ROOT"] = PROJ_ROOT
+
+    cmd = "{} {} {}".format(binary, bench, str(reps))
+    run(" ".join(cmd), check=True, shell=True, env=env)
