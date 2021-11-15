@@ -64,7 +64,7 @@ def pyperf(ctx, headless=False):
         for f, n in zip(faasm_execs, native_execs):
             faasm_ratios.append(f / n)
 
-        bench_names.append(bench_name)
+        bench_names.append(bench_name.replace("bench_", ""))
         exec_times.append(np.mean(faasm_ratios))
         exec_errs.append(np.std(faasm_ratios))
 
