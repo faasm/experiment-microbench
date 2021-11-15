@@ -7,7 +7,7 @@ def faasm_main():
     if os.environ.get("PYTHONWASM") == "1":
         repo_path = "/lib/python3.8/site-packages/pyperformance/benchmarks/data/asyncio.git"
     else:
-        repo_path = "/code/cpp/venv/lib/python3.8/site-packages/pyperformance/benchmarks/data/asyncio.git"
+        repo_path = "/usr/local/lib/python3.8/dist-packages/pyperformance/benchmarks/data/asyncio.git"
 
     repo = dulwich.repo.Repo(repo_path)
     head = repo.head()

@@ -6,6 +6,10 @@ RUN apt install -y \
     python3-matplotlib \
     python3-pyaes
 
+# Hack to override CPP container venv
+WORKDIR /code/cpp
+RUN python3 -m venv --system-site-packages venv
+
 # Clone the code
 RUN git clone https://github.com/faasm/experiment-microbench /code/experiment-microbench
 WORKDIR /code/experiment-microbench
@@ -17,6 +21,7 @@ RUN git checkout native-py
 RUN pip3 install -r requirements.txt
 
 # Build the native runner
+WORKDIR /code/experiment-microbench
 RUN inv pyperf.native-build
 
 CMD "/bin/bash"

@@ -7,7 +7,7 @@ def faasm_main():
     if os.environ.get("PYTHONWASM") == "1":
         file_path = "/lib/python3.8/site-packages/pyperformance/benchmarks/data/interpreter.tar.bz2"
     else:
-        file_path = "/code/cpp/venv/lib/python3.8/site-packages/pyperformance/benchmarks/data/interpreter.tar.bz2"
+        file_path = "/usr/local/lib/python3.8/dist-packages/pyperformance/benchmarks/data/interpreter.tar.bz2"
 
     bench_pyflake(1, file_path)
 
