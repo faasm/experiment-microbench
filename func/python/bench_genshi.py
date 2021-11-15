@@ -7,3 +7,7 @@ def faasm_main():
         bench_genshi(3, tmpl_cls, tmpl_str)
 
     return 0
+
+
+if __name__ == "__main__":
+    faasm_main()

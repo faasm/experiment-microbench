@@ -63,9 +63,9 @@ Then run with:
 ./bin/run.sh polybench
 ```
 
-Results are found at `polybench_out.csv` in the root of this directory.
+Results are found at `results/polybench_out.csv`.
 
-### Python performance benchmarks
+## Python performance benchmarks
 
 Faasm's [Python support](https://github.com/faasm/python) includes the Python
 performance benchmarks library and the transitive dependencies for the
@@ -78,7 +78,7 @@ To set up the functions:
 docker-compose run pyperf
 
 # Upload Python benchmark functions
-inv pyperf
+inv pyperf.upload
 
 # Leave container
 exit
@@ -90,7 +90,34 @@ Then run with:
 ./bin/run.sh pyperf
 ```
 
-Results are found at `pyperf_out.csv` in the root of this directory.
+Results are found at `results/pyperf_out.csv`.
+
+### Native Python run
+
+To run the benchmarks natively and ensure a like-for-like comparison, you can
+set up and run the native Python benchmark runner with:
+
+```bash
+docker-compose run pyperf
+
+inv pyperf.native-build
+
+inv pyperf.native-run
+```
+
+Results are found at `results/pyperf_native_out.csv`.
+
+### Plotting results
+
+Once you've got both the Faasm and native runs, you can plot them with:
+
+```bash
+# If you have a display
+int plot.pyperf
+
+# Headless
+int plot.pyperf --headless
+```
 
 ## Docker images
 
@@ -101,4 +128,3 @@ inv container.polybench --push
 
 inv container.pyperf --push
 ```
-

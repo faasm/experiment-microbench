@@ -244,3 +244,7 @@ def faasm_main():
         benchmark(inner_loops * multiplier)
 
     return 0
+
+
+if __name__ == "__main__":
+    faasm_main()

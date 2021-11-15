@@ -22,3 +22,7 @@ def faasm_main():
             vv += ve * ve
 
     return 0
+
+
+if __name__ == "__main__":
+    faasm_main()

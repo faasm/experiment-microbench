@@ -18,3 +18,7 @@ def faasm_main():
         bench_json_loads(objs)
 
     return 0
+
+
+if __name__ == "__faasm__":
+    faasm_main()
