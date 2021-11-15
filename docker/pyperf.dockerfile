@@ -14,9 +14,6 @@ RUN python3 -m venv --system-site-packages venv
 RUN git clone https://github.com/faasm/experiment-microbench /code/experiment-microbench
 WORKDIR /code/experiment-microbench
 
-# TEMP - checkout dev branch
-RUN git checkout native-py
-
 # Install Python deps
 RUN pip3 install -r requirements.txt
 
