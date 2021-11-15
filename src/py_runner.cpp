@@ -1,22 +1,67 @@
+#include <Python.h>
+#include <wait.h>
+
+#include <algorithm>
+#include <chrono>
 #include <fstream>
-#include <util/config.h>
-#include <util/logging.h>
+#include <vector>
 
-#define OUTPUT_FILE "/tmp/pybench.csv"
+#define OUTPUT_FILE "results/pyperf_native_out.csv"
 
-int main(int argc, char* argv[])
-{
-    util::initLogging();
-    const std::shared_ptr<spdlog::logger>& logger = util::getLogger();
+long runPythonFile(const char* pyPath) {
+    // To avoid contamination across runs, fork a new process
+    int pid = fork();
 
-    if (argc < 4) {
-        logger->error("Usage:\npython_bench <benchmark> <nNative> <nWasm>");
+    long startUs = std::chrono::duration_cast<std::chrono::microseconds>(
+                      std::chrono::system_clock::now().time_since_epoch())
+                      .count();
+
+    if (pid == 0) {
+        // Try to open it
+        FILE* fp = fopen(pyPath, "r");
+        if (fp == nullptr) {
+            throw std::runtime_error("Failed to open python file");
+        }
+
+        printf("Running python function: %s\n", pyPath);
+
+        Py_InitializeEx(0);
+
+        PyRun_SimpleFile(fp, pyPath);
+
+        Py_FinalizeEx();
+
+        fclose(fp);
+
+        exit(0);
+    } else {
+        int status = 0;
+        while (-1 == waitpid(pid, &status, 0))
+            ;
+
+        if (!WIFEXITED(status) || WEXITSTATUS(status) != 0) {
+            printf("Failed running native python benchmark %s\n", pyPath);
+            exit(1);
+        }
+    }
+
+    long endUs = std::chrono::duration_cast<std::chrono::microseconds>(
+                      std::chrono::system_clock::now().time_since_epoch())
+                      .count();
+
+    long runTime = endUs - startUs;
+
+    return runTime;
+}
+
+int main(int argc, char* argv[]) {
+    if (argc < 3) {
+        printf("Usage:\npy_runner <benchmark> <nRuns>");
         return 1;
     }
 
     std::string benchmark = argv[1];
-    int nativeIterations = std::stoi(argv[2]);
-    int wasmIterations = std::stoi(argv[3]);
+    int iterations = std::stoi(argv[2]);
 
     std::vector<std::string> all_benchmarks = {
         "bench_chaos",      "bench_deltablue",       "bench_dulwich",
@@ -32,12 +77,11 @@ int main(int argc, char* argv[])
     std::vector<std::string> benchmarks;
     if (benchmark == "all") {
         benchmarks = all_benchmarks;
-    } else if (std::find(all_benchmarks.begin(),
-                         all_benchmarks.end(),
+    } else if (std::find(all_benchmarks.begin(), all_benchmarks.end(),
                          benchmark) != all_benchmarks.end()) {
-        benchmarks = { benchmark };
+        benchmarks = {benchmark};
     } else {
-        logger->error("Unrecognised benchmark: {}", benchmark);
+        printf("Unrecognised benchmark: %s\n", benchmark.c_str());
         return 1;
     }
 
@@ -46,14 +90,14 @@ int main(int argc, char* argv[])
     profOut.open(OUTPUT_FILE);
     profOut << "benchmark,type,microseconds" << std::endl;
 
-    // Switch off Python preloading
-    util::SystemConfig& conf = util::getSystemConfig();
-    conf.pythonPreload = "off";
-
     for (auto const& b : benchmarks) {
-        runner::PythonProfiler prof(b);
-        prof.preflightWasm();
-        prof.runBenchmark(nativeIterations, wasmIterations, profOut);
+        // TODO - get file
+        std::string filePath = "";
+        for (int i = 0; i < iterations; i++) {
+            long runTimeUs = runPythonFile(filePath.c_str());
+
+            // TODO - write to file
+        }
     }
 
     profOut.flush();

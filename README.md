@@ -63,9 +63,9 @@ Then run with:
 ./bin/run.sh polybench
 ```
 
-Results are found at `polybench_out.csv` in the root of this directory.
+Results are found at `results/polybench_out.csv` in the root of this directory.
 
-### Python performance benchmarks
+## Python performance benchmarks
 
 Faasm's [Python support](https://github.com/faasm/python) includes the Python
 performance benchmarks library and the transitive dependencies for the
@@ -90,7 +90,20 @@ Then run with:
 ./bin/run.sh pyperf
 ```
 
-Results are found at `pyperf_out.csv` in the root of this directory.
+Results are found at `results/pyperf_out.csv` in the root of this directory.
+
+### Native Python run
+
+To run the benchmarks natively and ensure a like-for-like comparison, you can
+set up the native Python benchmark runner with:
+
+```bash
+docker-compose run pyperf
+
+inv pyperf.native
+
+inv pyperf.native-run
+```
 
 ## Docker images
 
@@ -101,4 +114,3 @@ inv container.polybench --push
 
 inv container.pyperf --push
 ```
-

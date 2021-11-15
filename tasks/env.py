@@ -4,6 +4,8 @@ from os.path import dirname, realpath, expanduser, join, exists
 HOME_DIR = expanduser("~")
 PROJ_ROOT = dirname(dirname(realpath(__file__)))
 
+NATIVE_BUILD_DIR = join(PROJ_ROOT, "build", "native")
+
 FAASM_UPLOAD_HOST = "localhost"
 FAASM_UPLOAD_PORT = "8002"
 
