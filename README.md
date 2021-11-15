@@ -100,7 +100,7 @@ set up and run the native Python benchmark runner with:
 ```bash
 docker-compose run pyperf
 
-inv pyperf.native
+inv pyperf.native-build
 
 inv pyperf.native-run
 ```

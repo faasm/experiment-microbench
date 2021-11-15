@@ -2,7 +2,7 @@ version: "3"
 
 services:
   polybench:
-    image: faasm/experiment-polybench:0.0.1
+    image: faasm/experiment-polybench:0.0.2
     working_dir: /code/experiment-microbench
     stdin_open: true
     tty: true
@@ -11,7 +11,7 @@ services:
       - .:/code/experiment-microbench
 
   pyperf:
-    image: faasm/experiment-pyperf:0.0.1
+    image: faasm/experiment-pyperf:0.0.2
     working_dir: /code/experiment-microbench
     stdin_open: true
     tty: true

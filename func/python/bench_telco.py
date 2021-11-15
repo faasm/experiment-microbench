@@ -86,9 +86,7 @@ def faasm_main():
     if os.environ.get("PYTHONWASM") == "1":
         file_path = "/lib/python3.8/site-packages/pyperformance/benchmarks/data/telco-bench.b"
     else:
-        file_path = "/usr/local/code/faasm/venv/lib/python3.6/site-packages/pyperformance/benchmarks/data/telco-bench.b"
-        if not exists(file_path):
-            file_path = "/usr/local/lib/python3.6/dist-packages/pyperformance/benchmarks/data/telco-bench.b"
+        file_path = "/code/cpp/venv/lib/python3.8/site-packages/pyperformance/benchmarks/data/telco-bench.b"
 
     loops = 10
 

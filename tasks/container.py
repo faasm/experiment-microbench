@@ -22,14 +22,6 @@ def pyperf(ctx, nocache=False, push=False):
     _do_build("pyperf", nocache, push)
 
 
-@task
-def pyperf(ctx, nocache=False, push=False):
-    """
-    Build the native experiment runner
-    """
-    _do_build("native", nocache, push)
-
-
 def _do_build(experiment_name, nocache=False, push=False):
     shell_env = copy(environ)
     shell_env["DOCKER_BUILDKIT"] = "1"
