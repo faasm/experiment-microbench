@@ -28,10 +28,6 @@ def read_results(csv_path):
             exec_time = float(line_parts[3])
             reset_time = float(line_parts[4])
 
-            print(
-                "Found {}: {}us {}us".format(bench_name, exec_time, reset_time)
-            )
-
             data[bench_name].append((exec_time, reset_time))
 
     return data
@@ -58,15 +54,22 @@ def polybench(ctx, headless=False):
 
 
 def _do_plot(native_data, faasm_data, plot_file, headless):
-    bench_names = list()
     exec_times = list()
     exec_errs = list()
 
-    bench_names = faasm_data.keys().sorted()
     # Load data for all benchmarks
+    bench_names = sorted(faasm_data.keys())
+    print("Plotting benchmarks: {}".format(bench_names))
     for bench_name in bench_names:
         native_bench = native_data[bench_name]
         faasm_bench = faasm_data[bench_name]
+
+        if len(native_bench) != len(faasm_bench):
+            print(
+                "Mismatched results: {} for native and {} for faasm".format(
+                    len(native_bench), len(faasm_bench)
+                )
+            )
 
         # Calculate averages and stddevs
         native_execs = [n[0] for n in native_bench]
@@ -77,14 +80,13 @@ def _do_plot(native_data, faasm_data, plot_file, headless):
         for f, n in zip(faasm_execs, native_execs):
             faasm_ratios.append(f / n)
 
-        bench_names.append(bench_name.replace("bench_", ""))
-        bench_names.append(bench_name.replace("poly_", ""))
         exec_times.append(np.mean(faasm_ratios))
         exec_errs.append(np.std(faasm_ratios))
 
     # Plot the bar chart
+    labels = [b.replace("bench_", "").replace("poly_", "") for b in bench_names]
     plt.bar(
-        bench_names,
+        labels,
         exec_times,
         yerr=exec_errs,
         alpha=0.9,
