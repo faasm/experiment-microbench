@@ -104,7 +104,7 @@ def upload(ctx, clean=False):
 
 
 @task
-def native_run(ctx, clean=False, bench="all", reps=1):
+def native_run(ctx, clean=False, bench="all", reps=3):
     """
     Runs the native polybench benchmarks
     """

@@ -54,7 +54,7 @@ def polybench(ctx, headless=False):
     """
     native_data = read_results(POLY_NATIVE_RESULTS)
     faasm_data = read_results(POLY_FAASM_RESULTS)
-    _do_plot(native_data, faasm_data, PYPERF_PLOT_FILE, headless)
+    _do_plot(native_data, faasm_data, POLY_PLOT_FILE, headless)
 
 
 def _do_plot(native_data, faasm_data, plot_file, headless):
