@@ -67,7 +67,7 @@ int main(int argc, char* argv[]) {
             long runTimeUs = microsNow() - runtimeStart;
 
             // Write result
-            profOut << "polybench" << b << ",0," << runTimeUs << ",-\n";
+            profOut << "polybench," << b << ",0," << runTimeUs << ",0\n";
             printf("Ran %s in %luus\n", b.c_str(), runTimeUs);
         }
     }

@@ -1,0 +1,24 @@
+User,Function,Return value,Execution (us),Reset (us)
+polybench,poly_covariance,0,8.76383e+06,1099.39
+polybench,poly_correlation,0,8.84541e+06,906.521
+polybench,poly_2mm,0,2.08491e+06,1144.36
+polybench,poly_3mm,0,9.70742e+06,1497.93
+polybench,poly_atax,0,21994.2,747.341
+polybench,poly_bicg,0,25866.1,665.394
+polybench,poly_doitgen,0,573388,744.508
+polybench,poly_mvt,0,48316.6,753.137
+polybench,poly_cholesky,0,6.21159e+07,1995.07
+polybench,poly_durbin,0,5084.18,149.432
+polybench,poly_gramschmidt,0,2.19782e+07,1011.24
+polybench,poly_lu,0,7.04801e+07,2002.35
+polybench,poly_ludcmp,0,7.04098e+07,1992.71
+polybench,poly_trisolv,0,11976.5,602.127
+polybench,poly_deriche,0,539947,6575.06
+polybench,poly_floyd-warshall,0,2.22408e+07,1811.8
+polybench,poly_nussinov,0,1.31779e+07,1461.99
+polybench,poly_adi,0,1.19581e+07,1038.61
+polybench,poly_fdtd-2d,0,2.39988e+06,878.219
+polybench,poly_heat-3d,0,8.51938e+06,926.953
+polybench,poly_jacobi-1d,0,3728.78,147.182
+polybench,poly_jacobi-2d,0,4.92388e+06,911.589
+polybench,poly_seidel-2d,0,1.8888e+07,1058.83
