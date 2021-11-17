@@ -5,9 +5,13 @@ import matplotlib.pyplot as plt
 from os.path import join
 from tasks.env import PROJ_ROOT
 
-NATIVE_RESULTS = join(PROJ_ROOT, "results", "pyperf_native_out.csv")
-FAASM_RESULTS = join(PROJ_ROOT, "results", "pyperf_out.csv")
-PLOT_FILE = join(PROJ_ROOT, "results", "pyperf_plot.png")
+PYPERF_NATIVE_RESULTS = join(PROJ_ROOT, "results", "pyperf_native_out.csv")
+PYPERF_FAASM_RESULTS = join(PROJ_ROOT, "results", "pyperf_out.csv")
+PYPERF_PLOT_FILE = join(PROJ_ROOT, "results", "pyperf_plot.png")
+
+POLY_NATIVE_RESULTS = join(PROJ_ROOT, "results", "polybench_native_out.csv")
+POLY_FAASM_RESULTS = join(PROJ_ROOT, "results", "polybench_out.csv")
+POLY_PLOT_FILE = join(PROJ_ROOT, "results", "polybench_plot.png")
 
 
 def read_results(csv_path):
@@ -24,10 +28,6 @@ def read_results(csv_path):
             exec_time = float(line_parts[3])
             reset_time = float(line_parts[4])
 
-            print(
-                "Found {}: {}us {}us".format(bench_name, exec_time, reset_time)
-            )
-
             data[bench_name].append((exec_time, reset_time))
 
     return data
@@ -38,22 +38,38 @@ def pyperf(ctx, headless=False):
     """
     Plot the results of the python performance functions
     """
-    native_data = read_results(NATIVE_RESULTS)
-    faasm_data = read_results(FAASM_RESULTS)
+    native_data = read_results(PYPERF_NATIVE_RESULTS)
+    faasm_data = read_results(PYPERF_FAASM_RESULTS)
+    _do_plot(native_data, faasm_data, PYPERF_PLOT_FILE, headless)
 
-    bench_names = list()
+
+@task
+def polybench(ctx, headless=False):
+    """
+    Plot the results of the polybench functions
+    """
+    native_data = read_results(POLY_NATIVE_RESULTS)
+    faasm_data = read_results(POLY_FAASM_RESULTS)
+    _do_plot(native_data, faasm_data, POLY_PLOT_FILE, headless)
+
+
+def _do_plot(native_data, faasm_data, plot_file, headless):
     exec_times = list()
     exec_errs = list()
 
     # Load data for all benchmarks
-    for bench_name in native_data.keys():
-        print("Found native bench {}".format(bench_name))
-        if bench_name not in faasm_data:
-            print("No Faasm data for bench {}".format(bench_name))
-            continue
-
+    bench_names = sorted(faasm_data.keys())
+    print("Plotting benchmarks: {}".format(bench_names))
+    for bench_name in bench_names:
         native_bench = native_data[bench_name]
         faasm_bench = faasm_data[bench_name]
+
+        if len(native_bench) != len(faasm_bench):
+            print(
+                "Mismatched results: {} for native and {} for faasm".format(
+                    len(native_bench), len(faasm_bench)
+                )
+            )
 
         # Calculate averages and stddevs
         native_execs = [n[0] for n in native_bench]
@@ -64,13 +80,13 @@ def pyperf(ctx, headless=False):
         for f, n in zip(faasm_execs, native_execs):
             faasm_ratios.append(f / n)
 
-        bench_names.append(bench_name.replace("bench_", ""))
         exec_times.append(np.mean(faasm_ratios))
         exec_errs.append(np.std(faasm_ratios))
 
     # Plot the bar chart
+    labels = [b.replace("bench_", "").replace("poly_", "") for b in bench_names]
     plt.bar(
-        bench_names,
+        labels,
         exec_times,
         yerr=exec_errs,
         alpha=0.9,
@@ -92,7 +108,7 @@ def pyperf(ctx, headless=False):
 
     plt.tight_layout()
 
-    plt.savefig(PLOT_FILE, format="png")
+    plt.savefig(plot_file, format="png")
 
     if not headless:
         plt.show()

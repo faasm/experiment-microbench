@@ -13,9 +13,7 @@ from tasks.env import (
     NATIVE_BUILD_DIR,
 )
 
-
 PY_FUNC_DIR = join(PROJ_ROOT, "func", "python")
-
 USER = "python"
 
 

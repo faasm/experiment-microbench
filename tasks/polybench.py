@@ -1,11 +1,18 @@
 from invoke import task
 from shutil import rmtree
+from copy import copy
+import os
 from os.path import exists, join
 from os import makedirs, listdir
 from subprocess import run
 import requests
 
-from tasks.env import PROJ_ROOT, FAASM_UPLOAD_HOST, FAASM_UPLOAD_PORT
+from tasks.env import (
+    PROJ_ROOT,
+    FAASM_UPLOAD_HOST,
+    FAASM_UPLOAD_PORT,
+    NATIVE_BUILD_DIR,
+)
 
 CMAKE_TOOLCHAIN_FILE = "/usr/local/faasm/toolchain/tools/WasiToolchain.cmake"
 
@@ -15,33 +22,63 @@ POLYBENCH_SRC_DIR = join(PROJ_ROOT, "func", "polybench")
 POLYBENCH_USER = "polybench"
 
 
-@task(default=True)
-def build(ctx, clean=False):
+@task
+def wasm(ctx, clean=False):
     """
-    Builds the polybench functions
+    Builds the polybench functions to wasm
     """
-    if clean and exists(POLYBENCH_BUILD_DIR):
-        rmtree(POLYBENCH_BUILD_DIR)
+    _do_build(POLYBENCH_BUILD_DIR, True, clean)
 
-    makedirs(POLYBENCH_BUILD_DIR, exist_ok=True)
+
+@task
+def native_build(ctx, clean=False):
+    """
+    Builds the polybench functions natively
+    """
+    _do_build(NATIVE_BUILD_DIR, False, clean)
+
+
+def _do_build(build_dir, is_wasm, clean):
+    if clean and exists(build_dir):
+        rmtree(build_dir)
+
+    makedirs(build_dir, exist_ok=True)
 
     cmake_cmd = [
         "cmake",
         "-GNinja",
         "-DCMAKE_BUILD_TYPE=Release",
-        "-DCMAKE_TOOLCHAIN_FILE={}".format(CMAKE_TOOLCHAIN_FILE),
-        POLYBENCH_SRC_DIR,
     ]
+
+    if is_wasm:
+        cmake_cmd.extend(
+            [
+                "-DFAASM_BUILD_TYPE=wasm",
+                "-DCMAKE_TOOLCHAIN_FILE={}".format(CMAKE_TOOLCHAIN_FILE),
+                POLYBENCH_SRC_DIR
+            ]
+        )
+    else:
+        cmake_cmd.append(PROJ_ROOT)
+
     cmake_cmd_str = " ".join(cmake_cmd)
 
-    run(cmake_cmd_str, shell=True, check=True, cwd=POLYBENCH_BUILD_DIR)
+    run(cmake_cmd_str, shell=True, check=True, cwd=build_dir)
 
     run(
         "cmake --build . --target polybench_all",
         shell=True,
         check=True,
-        cwd=POLYBENCH_BUILD_DIR,
+        cwd=build_dir,
     )
+
+    if not is_wasm:
+        run(
+            "cmake --build . --target polybench_runner",
+            shell=True,
+            check=True,
+            cwd=build_dir,
+        )
 
 
 @task
@@ -64,3 +101,17 @@ def upload(ctx, clean=False):
         response = requests.put(url, data=open(full_file, "rb"))
 
         print("Response ({}): {}".format(response.status_code, response.text))
+
+
+@task
+def native_run(ctx, clean=False, bench="all", reps=3):
+    """
+    Runs the native polybench benchmarks
+    """
+    binary = join(NATIVE_BUILD_DIR, "bin", "polybench_runner")
+
+    env = copy(os.environ)
+    env["MICROBENCH_ROOT"] = PROJ_ROOT
+
+    cmd = "{} {} {}".format(binary, bench, str(reps))
+    run(cmd, check=True, shell=True, env=env)

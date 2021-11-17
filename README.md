@@ -50,7 +50,7 @@ To set up the functions:
 docker-compose run polybench
 
 # Compile and upload
-inv polybench
+inv polybench.wasm
 inv polybench.upload
 
 # Exit
@@ -64,6 +64,21 @@ Then run with:
 ```
 
 Results are found at `results/polybench_out.csv`.
+
+### Native Polybench run
+
+To run the benchmarks natively and ensure a like-for-like comparison, you can
+set up and run the native Polybench benchmark runner with:
+
+```bash
+docker-compose run polybench
+
+inv polybench.native-build
+
+inv polybench.native-run
+```
+
+Results are found at `results/polybench_native_out.csv`.
 
 ## Python performance benchmarks
 
@@ -107,16 +122,19 @@ inv pyperf.native-run
 
 Results are found at `results/pyperf_native_out.csv`.
 
-### Plotting results
+## Plotting results
 
-Once you've got both the Faasm and native runs, you can plot them with:
+Once you've got both the Faasm and native runs for either experiment, you can
+plot them with:
 
 ```bash
 # If you have a display
-int plot.pyperf
+inv plot.polybench
+inv plot.pyperf
 
 # Headless
-int plot.pyperf --headless
+inv plot.polybench --headless
+inv plot.pyperf --headless
 ```
 
 ## Docker images

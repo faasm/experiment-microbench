@@ -1,16 +1,9 @@
+#include "runner.h"
+
 #include <Python.h>
+
 #include <wait.h>
-
-#include <algorithm>
-#include <chrono>
 #include <fstream>
-#include <vector>
-
-long microsNow() {
-    return std::chrono::duration_cast<std::chrono::microseconds>(
-               std::chrono::system_clock::now().time_since_epoch())
-        .count();
-}
 
 int main(int argc, char* argv[]) {
     if (argc < 3) {
@@ -21,13 +14,9 @@ int main(int argc, char* argv[]) {
     std::string benchmark = argv[1];
     int iterations = std::stoi(argv[2]);
 
-    const char* baseDir = getenv("MICROBENCH_ROOT");
-    if (baseDir == nullptr) {
-        printf("Must set MICROBENCH_ROOT env var to the root of the project\n");
-        return 1;
-    }
+    const char* baseDir = getBaseDir();
 
-    std::vector<std::string> all_benchmarks = {
+    std::vector<std::string> allBenchmarks = {
         "bench_chaos",      "bench_deltablue",       "bench_dulwich",
         "bench_fannkuch",   "bench_float",           "bench_genshi",
         "bench_go",         "bench_hexiom",          "bench_json_dumps",
@@ -38,16 +27,8 @@ int main(int argc, char* argv[]) {
         "bench_telco",      "bench_unpack_sequence", "bench_version",
     };
 
-    std::vector<std::string> benchmarks;
-    if (benchmark == "all") {
-        benchmarks = all_benchmarks;
-    } else if (std::find(all_benchmarks.begin(), all_benchmarks.end(),
-                         benchmark) != all_benchmarks.end()) {
-        benchmarks = {benchmark};
-    } else {
-        printf("Unrecognised benchmark: %s\n", benchmark.c_str());
-        return 1;
-    }
+    std::vector<std::string> benchmarks =
+        filterBenchmarks(allBenchmarks, benchmark);
 
     std::string outFile =
         std::string(baseDir) + "/results/pyperf_native_out.csv";
