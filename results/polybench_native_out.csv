@@ -1,0 +1,24 @@
+User,Function,Return value,Execution (us),Reset (us)
+polybenchpoly_covariance,0,8803620,-
+polybenchpoly_correlation,0,8867406,-
+polybenchpoly_2mm,0,1909631,-
+polybenchpoly_3mm,0,9610593,-
+polybenchpoly_atax,0,25488,-
+polybenchpoly_bicg,0,25416,-
+polybenchpoly_doitgen,0,545526,-
+polybenchpoly_mvt,0,59434,-
+polybenchpoly_cholesky,0,63447961,-
+polybenchpoly_durbin,0,8826,-
+polybenchpoly_gramschmidt,0,21993602,-
+polybenchpoly_lu,0,72192082,-
+polybenchpoly_ludcmp,0,72779542,-
+polybenchpoly_trisolv,0,16064,-
+polybenchpoly_deriche,0,538295,-
+polybenchpoly_floyd-warshall,0,28458388,-
+polybenchpoly_nussinov,0,12561104,-
+polybenchpoly_adi,0,13511445,-
+polybenchpoly_fdtd-2d,0,732376,-
+polybenchpoly_heat-3d,0,1448100,-
+polybenchpoly_jacobi-1d,0,6398,-
+polybenchpoly_jacobi-2d,0,790039,-
+polybenchpoly_seidel-2d,0,18896656,-

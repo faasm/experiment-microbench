@@ -1,16 +1,18 @@
-# CMake setup
 cmake_minimum_required (VERSION 3.11)
+project(polybench)
 
-SET(CMAKE_EXE_LINKER_FLAGS "${FAASM_EXE_LINKER_FLAGS} \
-    -Xlinker --export=_faasm_zygote \
-    -Xlinker --export=__heap_base \
-    -Xlinker --export=__data_end \
-    -Xlinker --export=__wasm_call_ctors \
-    -Xlinker --max-memory=4294901760 \
-    -Wl,-z,stack-size=4194304 -Wl, \
-")
+if (FAASM_BUILD_TYPE STREQUAL "wasm")
+    SET(CMAKE_EXE_LINKER_FLAGS "${FAASM_EXE_LINKER_FLAGS} \
+        -Xlinker --export=_faasm_zygote \
+        -Xlinker --export=__heap_base \
+        -Xlinker --export=__data_end \
+        -Xlinker --export=__wasm_call_ctors \
+        -Xlinker --max-memory=4294901760 \
+        -Wl,-z,stack-size=4194304 -Wl, \
+    ")
 
-SET(CMAKE_EXECUTABLE_SUFFIX ".wasm")
+    SET(CMAKE_EXECUTABLE_SUFFIX ".wasm")
+endif()
 
 include_directories(${CMAKE_CURRENT_LIST_DIR}/utilities)
 
@@ -28,11 +30,14 @@ function(polybench_func exec_name dir_path)
             utilities/polybench.h
             )
 
+    if (FAASM_BUILD_TYPE STREQUAL "wasm")
         target_link_libraries(poly_${exec_name} ${FAASM_FUNC_LIBS})
+    else()
+        target_link_libraries(poly_${exec_name} m)
+    endif()
 
     # Add this func to the list of all functions
     set(ALL_POLY_FUNCS ${ALL_POLY_FUNCS} poly_${exec_name} PARENT_SCOPE)
-
 endfunction(polybench_func)
 
 polybench_func(covariance datamining)

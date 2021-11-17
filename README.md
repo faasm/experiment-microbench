@@ -50,7 +50,7 @@ To set up the functions:
 docker-compose run polybench
 
 # Compile and upload
-inv polybench
+inv polybench.wasm
 inv polybench.upload
 
 # Exit

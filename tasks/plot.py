@@ -5,9 +5,13 @@ import matplotlib.pyplot as plt
 from os.path import join
 from tasks.env import PROJ_ROOT
 
-NATIVE_RESULTS = join(PROJ_ROOT, "results", "pyperf_native_out.csv")
-FAASM_RESULTS = join(PROJ_ROOT, "results", "pyperf_out.csv")
-PLOT_FILE = join(PROJ_ROOT, "results", "pyperf_plot.png")
+PYPERF_NATIVE_RESULTS = join(PROJ_ROOT, "results", "pyperf_native_out.csv")
+PYPERF_FAASM_RESULTS = join(PROJ_ROOT, "results", "pyperf_out.csv")
+PYPERF_PLOT_FILE = join(PROJ_ROOT, "results", "pyperf_plot.png")
+
+POLY_NATIVE_RESULTS = join(PROJ_ROOT, "results", "polybench_native_out.csv")
+POLY_FAASM_RESULTS = join(PROJ_ROOT, "results", "polybench_out.csv")
+POLY_PLOT_FILE = join(PROJ_ROOT, "results", "polybench_plot.png")
 
 
 def read_results(csv_path):
@@ -38,9 +42,22 @@ def pyperf(ctx, headless=False):
     """
     Plot the results of the python performance functions
     """
-    native_data = read_results(NATIVE_RESULTS)
-    faasm_data = read_results(FAASM_RESULTS)
+    native_data = read_results(PYPERF_NATIVE_RESULTS)
+    faasm_data = read_results(PYPERF_FAASM_RESULTS)
+    _do_plot(native_data, faasm_data, PYPERF_PLOT_FILE, headless)
 
+
+@task
+def polybench(ctx, headless=False):
+    """
+    Plot the results of the polybench functions
+    """
+    native_data = read_results(POLY_NATIVE_RESULTS)
+    faasm_data = read_results(POLY_FAASM_RESULTS)
+    _do_plot(native_data, faasm_data, PYPERF_PLOT_FILE, headless)
+
+
+def _do_plot(native_data, faasm_data, plot_file, headless):
     bench_names = list()
     exec_times = list()
     exec_errs = list()
@@ -92,7 +109,7 @@ def pyperf(ctx, headless=False):
 
     plt.tight_layout()
 
-    plt.savefig(PLOT_FILE, format="png")
+    plt.savefig(plot_file, format="png")
 
     if not headless:
         plt.show()

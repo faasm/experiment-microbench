@@ -16,6 +16,9 @@ int main(int argc, char* argv[]) {
     std::string benchmark = argv[1];
     int iterations = std::stoi(argv[2]);
 
+    printf("Running polybench benchmark [%s] %i times\n", benchmark.c_str(),
+           iterations);
+
     const char* baseDir = getBaseDir();
 
     std::vector<std::string> allBenchmarks = {
@@ -53,6 +56,7 @@ int main(int argc, char* argv[]) {
         std::string binPath = std::string(baseDir) + "/build/native/bin/" + b;
 
         for (int i = 0; i < iterations; i++) {
+            printf("Running %s\n", b.c_str());
             long runtimeStart = microsNow();
 
             // TODO - is it possible to avoid system here?
@@ -64,6 +68,7 @@ int main(int argc, char* argv[]) {
 
             // Write result
             profOut << "polybench" << b << ",0," << runTimeUs << ",-\n";
+            printf("Ran %s in %luus\n", b.c_str(), runTimeUs);
         }
     }
 
