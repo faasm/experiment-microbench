@@ -62,13 +62,9 @@ def _do_plot(native_data, faasm_data, plot_file, headless):
     exec_times = list()
     exec_errs = list()
 
+    bench_names = faasm_data.keys().sorted()
     # Load data for all benchmarks
-    for bench_name in native_data.keys():
-        print("Found native bench {}".format(bench_name))
-        if bench_name not in faasm_data:
-            print("No Faasm data for bench {}".format(bench_name))
-            continue
-
+    for bench_name in bench_names:
         native_bench = native_data[bench_name]
         faasm_bench = faasm_data[bench_name]
 
@@ -82,6 +78,7 @@ def _do_plot(native_data, faasm_data, plot_file, headless):
             faasm_ratios.append(f / n)
 
         bench_names.append(bench_name.replace("bench_", ""))
+        bench_names.append(bench_name.replace("poly_", ""))
         exec_times.append(np.mean(faasm_ratios))
         exec_errs.append(np.std(faasm_ratios))
 
