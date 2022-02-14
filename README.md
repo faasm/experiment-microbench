@@ -17,7 +17,7 @@ Then set `FAASM_ROOT` to the location of this checkout.
 
 From there, set up a local cluster that is able to execute Python functions,
 according to the [Python
-quick-start](https://github.com/faasm/faasm/blob/master/docs/python.md).
+quick-start](https://faasm.readthedocs.io/en/latest/source/python.html).
 
 Then you need to build the benchmark runner:
 
